@@ -52,33 +52,26 @@ export class GeminiService {
     return chat.text || "I'm sorry, I couldn't process that.";
   }
 
-  async generateAiQuiz(topic: string): Promise<any[]> {
+  async generateSentence(): Promise<{ pl: string; en: string }> {
     const response = await this.ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Generate 5 challenging quiz questions for ${topic}. Mix fill-in-the-blank and multiple choice.`,
+      contents: `Generate one challenging Polish sentence for English grammar practice (B1-B2 level). Focus on tenses, conditionals, passives, or complex structures. Provide both the Polish sentence and its correct English translation. Response format: JSON {"pl": "polish sentence", "en": "english translation"}`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {
-          type: Type.ARRAY,
-          items: {
-            type: Type.OBJECT,
-            properties: {
-              id: { type: Type.STRING },
-              type: { type: Type.STRING },
-              question: { type: Type.STRING },
-              options: { type: Type.ARRAY, items: { type: Type.STRING } },
-              answer: { type: Type.STRING },
-              explanation: { type: Type.STRING }
-            },
-            required: ["id", "type", "question", "answer", "explanation"]
-          }
+          type: Type.OBJECT,
+          properties: {
+            pl: { type: Type.STRING },
+            en: { type: Type.STRING }
+          },
+          required: ["pl", "en"]
         }
       }
     });
     try {
-      return JSON.parse(response.text || "[]");
+      return JSON.parse(response.text || '{"pl": "Nie udało się wygenerować zdania.", "en": "Failed to generate sentence."}');
     } catch {
-      return [];
+      return { pl: "Nie udało się wygenerować zdania.", en: "Failed to generate sentence." };
     }
   }
 }

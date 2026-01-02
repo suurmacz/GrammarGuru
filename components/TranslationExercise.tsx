@@ -16,19 +16,6 @@ export const TranslationExercise: React.FC<Props> = ({ gemini }) => {
   const [isTranslating, setIsTranslating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const sentences = [
-    { pl: "Nigdy nie byłem w Londynie.", en: "I have never been to London." },
-    { pl: "Co robiłeś wczoraj o 20:00?", en: "What were you doing at 8 PM yesterday?" },
-    { pl: "Jeśli jutro będzie padać, zostanę w domu.", en: "If it rains tomorrow, I will stay home." },
-    { pl: "Ten zamek został zbudowany w XV wieku.", en: "This castle was built in the 15th century." },
-    { pl: "On powiedział mi, że jest zmęczony.", en: "He told me that he was tired." },
-    { pl: "Muszę iść teraz do lekarza.", en: "I must go to the doctor now." },
-    { pl: "Ona pracuje tutaj od pięciu lat.", en: "She has worked here for five years." },
-    { pl: "Kiedy przyszedłem, on już wyszedł.", en: "When I arrived, he had already left." },
-    { pl: "Do godziny 18 skończę pracę.", en: "I will have finished work by 6 PM." },
-    { pl: "Kiedyś paliłem papierosy.", en: "I used to smoke cigarettes." }
-  ];
-
   const formatAIData = (text: string, isPolish: boolean = false) => {
     return text.split('\n').map((line, i) => {
       const cleanLine = line.replace(/[*#]/g, '').trim();
@@ -87,13 +74,24 @@ export const TranslationExercise: React.FC<Props> = ({ gemini }) => {
     }
   };
 
-  const nextSentence = () => {
-    const random = sentences[Math.floor(Math.random() * sentences.length)];
-    setCurrentSentence(random);
-    setUserInput('');
-    setFeedbackEn(null);
-    setFeedbackPl(null);
-    setError(null);
+  const nextSentence = async () => {
+    if (!gemini) {
+      setError("Nie ustawiono klucza API Gemini. Wejdź w ustawienia, aby go dodać.");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const newSentence = await gemini.generateSentence();
+      setCurrentSentence(newSentence);
+      setUserInput('');
+      setFeedbackEn(null);
+      setFeedbackPl(null);
+      setError(null);
+    } catch (e) {
+      setError("Failed to generate new sentence.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
