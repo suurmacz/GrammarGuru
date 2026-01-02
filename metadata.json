@@ -1,0 +1,7 @@
+{
+  "name": "GrammarGuru AI",
+  "description": "An interactive English grammar teacher powered by Gemini AI, featuring 12 core grammar sections, interactive quizzes, and a real-time AI tutor.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
