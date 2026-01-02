@@ -6,7 +6,7 @@ export class GeminiService {
 
   constructor() {
     // API Key is automatically provided via process.env.API_KEY
-    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    this.ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY });
   }
 
   async translateToPolish(text: string): Promise<string> {
