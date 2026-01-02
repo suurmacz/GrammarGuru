@@ -38,8 +38,8 @@ export default defineConfig(({ mode }) => {
         })
       ],
       define: {
-        'import.meta.env.VITE_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'import.meta.env.VITE_GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
+        'import.meta.env.VITE_API_KEY': '"AIzaSyC1WmsOo8lqasJ9bhu0b5lGUPD6iLlMFrM"',
+        'import.meta.env.VITE_GEMINI_API_KEY': '"AIzaSyC1WmsOo8lqasJ9bhu0b5lGUPD6iLlMFrM"'
       },
       resolve: {
         alias: {
